@@ -2,7 +2,7 @@
 
 source ./logging.sh
 
-section "Dumping data from the standalone and restoring to the cluster"
+write_info "Dumping data from the standalone and restoring to the cluster"
 
 databases=$(psql -d "$STANDALONE_URL" -t -A -c "SELECT datname FROM pg_database WHERE datistemplate = false;")
 dump_dir="db_dump"
@@ -12,15 +12,9 @@ dump_database() {
   local database=$1
   local dump_file="$dump_dir/$database.sql"
 
-  section "Dumping database: $database"
-  
-  if [[ ! -d "$dump_dir" ]]; then
-    write_info "Creating dump directory: $dump_dir"
-    mkdir -p "$dump_dir"
-  fi
+  write_info "Dumping database: $database"
 
   write_info "Dump file will be saved to: $dump_file"
-  ls -lah "$dump_dir"
 
   local base_url=$(echo $STANDALONE_URL | sed -E 's/(postgresql:\/\/[^:]+:[^@]+@[^:]+:[0-9]+)\/.*/\1/')
   local db_url="${base_url}/${database}"
@@ -44,8 +38,6 @@ ensure_database_exists() {
 
   write_info "Ensuring database $database exists"
 
-  write_info "$psql_url"
-
   if ! psql $psql_url -tA -c "SELECT 1 FROM pg_database WHERE datname='$db_name'" | grep -q 1; then
       write_ok "Database $db_name does not exist. Creating..."
       psql $psql_url -c "CREATE DATABASE \"$db_name\""
@@ -59,7 +51,7 @@ restore_database() {
   local base_url=$(echo $PRIMARY_URL | sed -E 's/(postgresql:\/\/[^:]+:[^@]+@[^:]+:[0-9]+)\/.*/\1/') #change this back to postgresql
   local db_url="${base_url}/${database}"
 
-  section "Restoring database: $database"
+  write_info "Restoring database: $database"
 
   write_info "dburl: $db_url"
   write_info "database: $database"

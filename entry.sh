@@ -13,12 +13,12 @@ main() {
     error_exit "PRIMARY_URL environment variable is not set."
   fi
 
-#   section "Syncing Data"
-#   ./sync_data.sh
-#   if [ $? -ne 0 ]; then
-#     error_exit "Data sync failed!"
-#   fi
-#   write_ok "Data sync completed successfully"
+  section "Syncing Data"
+  ./sync_data.sh
+  if [ $? -ne 0 ]; then
+    error_exit "Data sync failed!"
+  fi
+  write_ok "Data sync completed successfully"
 
   section "Setting Up Replication"
   ./setup_replication.sh

@@ -2,7 +2,7 @@
 
 source ./logging.sh
 
-section "Setting up replication"
+write_info "Setting up replication"
 
 restart_service() {
   write_info "Redeploying Standalone Postgres to apply WAL"
@@ -25,24 +25,7 @@ restart_service() {
     write_ok "Redeploy request sent to the API."
   fi
 
-  # sleep to allow service to receive request
-  sleep 10
 }
-
-wait_for_pg() {
-  write_info "Waiting for Postgres to become ready..."
-
-  local hostname=$(echo $STANDALONE_URL | sed -E 's/.*@([^:]+):.*/\1/')
-  local port=$(echo $STANDALONE_URL | sed -E 's/.*:([0-9]+)\/.*/\1/')
-
-  until pg_isready -h $hostname -p $port > /dev/null 2>&1; do
-    write_warn "Postgres is not ready yet. Waiting..."
-    sleep 5
-  done
-
-  write_ok "Postgres is ready!"
-}
-
 
 set_wal_level_logical() {
   write_info "Setting wal_level to logical"
@@ -51,9 +34,13 @@ set_wal_level_logical() {
 
 create_publication() {
   local database=$1
-  wait_for_pg
+
+  local hostname=$(echo $STANDALONE_URL | sed -E 's/.*@([^:]+):.*/\1/')
+  local user=$(echo $STANDALONE_URL | sed -E 's/^postgresql:\/\/([^:]+):.*/\1/')
+  local port=$(echo $STANDALONE_URL | sed -E 's/.*:([0-9]+)\/.*/\1/')
+
   write_info "Creating publication for $database"
-  psql "$STANDALONE_URL" -d "$database" -c "CREATE PUBLICATION pub_$database FOR ALL TABLES;" || error_exit "Failed to create publication for $database"
+  psql -h "$hostname" -p "$port" -U "$user" -d "$database" -c "CREATE PUBLICATION pub_$database FOR ALL TABLES;" || error_exit "Failed to create publication for $database"
 }
 
 create_subscription() {
@@ -72,10 +59,16 @@ create_subscription() {
 set_wal_level_logical
 restart_service
 
+write_info "Waiting for the standalone instance to redeploy for the new WAL level to take effect."
+sleep 20
+
 databases=$(psql -d "$STANDALONE_URL" -t -A -c "SELECT datname FROM pg_database WHERE datistemplate = false;")
 
 for db in $databases; do
   create_publication "$db"
+done
+
+for db in $databases; do
   create_subscription "$db"
 done
 
