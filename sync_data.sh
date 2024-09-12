@@ -56,7 +56,7 @@ ensure_database_exists() {
 
 restore_database() {
   local database=$1
-  local base_url=$(echo $PRIMARY_URL | sed -E 's/(postgres:\/\/[^:]+:[^@]+@[^:]+:[0-9]+)\/.*/\1/') #change this back to postgresql
+  local base_url=$(echo $PRIMARY_URL | sed -E 's/(postgresql:\/\/[^:]+:[^@]+@[^:]+:[0-9]+)\/.*/\1/') #change this back to postgresql
   local db_url="${base_url}/${database}"
 
   section "Restoring database: $database"
