@@ -53,9 +53,6 @@ restore_database() {
 
   write_info "Restoring database: $database"
 
-  write_info "dburl: $db_url"
-  write_info "database: $database"
-
   ensure_database_exists "$db_url"
 
   psql $db_url -v ON_ERROR_STOP=1 --echo-errors \

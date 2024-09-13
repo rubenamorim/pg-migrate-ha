@@ -59,8 +59,8 @@ create_subscription() {
 set_wal_level_logical
 restart_service
 
-write_info "Waiting for the standalone instance to redeploy for the new WAL level to take effect."
-sleep 20
+write_info "Wait 30s for the standalone instance to redeploy."
+sleep 30
 
 databases=$(psql -d "$STANDALONE_URL" -t -A -c "SELECT datname FROM pg_database WHERE datistemplate = false;")
 
