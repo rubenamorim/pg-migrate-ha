@@ -31,3 +31,5 @@ To set up replication, simply update the value of the pre-configured environment
 - `SETUP_REPLICATION=true`
 
 **WARNING**: This will restart your standalone Postgres instance in order to apply the wal_level configuration required to replicate data.
+
+![gif](/images/replication.gif)
