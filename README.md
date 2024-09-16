@@ -27,7 +27,7 @@ This script can also set up replication between the standalone Postgres instance
 This is useful for those who wish to test the cluster prior to moving traffic from their application.
 
 To set up replication, simply update the value of the pre-configured environment variable:
-- `SETUP_REPLICATION=true`
+- `ENABLE_REPLICATION=true`
 - `RAILWAY_API_TOKEN=your-api-token` ([docs for reference](https://docs.railway.app/reference/public-api#authentication)).
 
 **WARNING**: This will restart your standalone Postgres instance in order to apply the wal_level configuration required to replicate data.

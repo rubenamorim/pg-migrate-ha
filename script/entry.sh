@@ -20,15 +20,15 @@ main() {
   fi
   write_ok "Data sync completed successfully"
 
-  section "Setting up replication between the Standalone and Cluster"
-  if [[ "$SETUP_REPLICATION" == "true" ]]; then
+  section "Enabling replication between the Standalone and Cluster"
+  if [[ "$ENABLE_REPLICATION" == "true" ]]; then
     ./setup_replication.sh
     if [ $? -ne 0 ]; then
       error_exit "Replication setup failed!"
     fi
     write_ok "Replication setup completed successfully"
   else
-    write_info "SETUP_REPLICATION is false, no more work to do."
+    write_info "ENABLE_REPLICATION is false, no more work to do."
   fi
 
   section "PostgreSQL Migration Completed"
