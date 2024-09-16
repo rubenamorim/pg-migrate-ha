@@ -11,7 +11,6 @@ Deploy this service into your Railway project and configure the required variabl
 - `PRIMARY_URL` - URL of the primary node in your cluster.  
 *If you've just deployed the Postgres cluster from the [template in Railway](https://railway.app/template/ha-postgres), the primary node should be `pg-0`.*
 - `STANDALONE_URL` - URL of the standalone Postgres instance.
-- `RAILWAY_API_TOKEN` - Your [Railway API token](https://docs.railway.app/reference/public-api#authentication).
 
 **It is highly recommended to deploy these services into the same Railway project, to take advantage of the private network.**
 
@@ -29,6 +28,7 @@ This is useful for those who wish to test the cluster prior to moving traffic fr
 
 To set up replication, simply update the value of the pre-configured environment variable:
 - `SETUP_REPLICATION=true`
+- `RAILWAY_API_TOKEN=your-api-token` ([docs for reference](https://docs.railway.app/reference/public-api#authentication)).
 
 **WARNING**: This will restart your standalone Postgres instance in order to apply the wal_level configuration required to replicate data.
 
