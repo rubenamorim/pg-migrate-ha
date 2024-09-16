@@ -20,9 +20,9 @@ When setting the URLs, you can either hardcode the values, or use [reference var
 
 Once deployed, the script will connect to the standalone instance and dump each database within.  It will then restore each of them to the Primary node in the cluster to be replicated among the standby nodes.
 
-## Optional: Set up replication
+## Optional: Enable replication
 
-This script can also set up replication between the standalone Postgres instance and cluster, to maintain a data sync after the initial migration.
+This script can also enable replication between the standalone Postgres instance and cluster, to maintain a data sync after the initial migration.
 
 This is useful for those who wish to test the cluster prior to moving traffic from their application.
 
